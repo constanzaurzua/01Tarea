@@ -20,7 +20,7 @@ La temperatura effectiva de una estrella corresponde a la temperatura del cuerpo
 
 	donde h es la constante de Planck, c es la velocidad de la luz en el vacio, k<sub>B</sub> es la constante de Bolzmann, T es la temperatura del cuerpo negro y &lambda; es la longitud de onda.
 
-	Integre numericamente la funcion de Planck para estimar la energia total por unidad de area emitida por un cuerpo negro con la temperatura efectiva del sol (escriba su propio algoritmo). Comparela con la energia total calculada en 2) para estimar el radio efectivo del sol.
+	Integre numericamente la funcion de Planck para estimar la energia total por unidad de area emitida por un cuerpo negro con la temperatura efectiva del sol (escriba su propio algoritmo). Comparela con la energia total calculada en 2. para estimar el radio efectivo del sol.
 
 	>__Nota__. Se puede demostrar que la integral de la funcion de Planck corresponde a:
 
