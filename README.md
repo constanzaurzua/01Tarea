@@ -7,8 +7,8 @@ La temperatura effectiva de una estrella corresponde a la temperatura del cuerpo
 1. El archivo `sun_AMO.dat` contiene el espectro del Sol, medido justo afuera de nuestra atmosfera, en unidades de *energia por unidad de tiempo por unidad de area por unidad de longitud de onda*. Lea el archivo y plotee el espectro del Sol (es decir, flujo vs. longitud de onda). Use la convencion astronomica para su plot, esto es, usar *cgs* para las unidades de flujo y *Angstrom* o *micron* para la longitud de onda. Recuerde anotar los ejes incluyendo las unidades.
 
 	> __Ayuda.__
-	- El modulo `numpy` contiene la rutina `numpy.loadtxt` que le puede ser util para leer el archivo.
-	- Para plotear se recomienda usar el modulo `matplotlib`. Hay muchos ejemplos, con codigo incluido en el siguiente [link](http://matplotlib.org/gallery.html), en particular [este ejemplo sencillo](http://matplotlib.org/examples/pylab_examples/simple_plot.html) puede ser util.
+	>- El modulo `numpy` contiene la rutina `numpy.loadtxt` que le puede ser util para leer el archivo.
+	>- Para plotear se recomienda usar el modulo `matplotlib`. Hay muchos ejemplos, con codigo incluido en el siguiente [link](http://matplotlib.org/gallery.html), en particular [este ejemplo sencillo](http://matplotlib.org/examples/pylab_examples/simple_plot.html) puede ser util.
 
 2. Elija un metodo apropiado para integrar el espectro en longitud de onda y calcule la luminosidad total del sol (energia por unidad de tiempo total). Se pide que escriba su propio algoritmo para llevar a cabo la integracion, en el futuro usaremos librerias de libre disposicion.
 
@@ -31,9 +31,9 @@ La temperatura effectiva de una estrella corresponde a la temperatura del cuerpo
 	>Y la integral se puede calcular analiticamente con resultado &pi;<sup>4</sup>/15. El problema pide elegir un metodo apropiado y calcular la integral numericamente y comparar con el resultado analitico.
 
 	>__Ayuda.__
-	- El modulo `astropy` contiene el submodulo `astropy.constants` que incluye todas las constantes necesarias ademas de rutinas para cambiar unidades.
-	- La integral que es necesario calcular es entre 0 e &infin; asi que requiere ser normalizada. Intente el cambio de variable y=arctan(x).
-	- Implemente un algoritmo que permita ir refinando el valor de la integral con una tolerancia elegida por Ud.
+	>- El modulo `astropy` contiene el submodulo `astropy.constants` que incluye todas las constantes necesarias ademas de rutinas para cambiar unidades.
+	>- La integral que es necesario calcular es entre 0 e &infin; asi que requiere ser normalizada. Intente el cambio de variable y=arctan(x).
+	>- Implemente un algoritmo que permita ir refinando el valor de la integral con una tolerancia elegida por Ud.
 
 4. El modulo `scipy` en Python incluye los metodos `scipy.integrate.trapz` y `scipy.integrate.quad`. Utilicelos para re-calcular las integrales calculadas en 2. y 3. Compare los valores obtenidos y la velocidad de ejecucion del algoritmo escrito por Ud. vs. `scipy` ¿A que se debe la diferencia?
 
