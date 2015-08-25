@@ -45,4 +45,4 @@ La temperatura effectiva de una estrella corresponde a la temperatura del cuerpo
 __Otras Notas.__
 - Utilice `git` durante el desarrollo de la tarea para mantener un historial de los cambios realizados.
 - La tarea se entrega como un *pull request* en github. El *pull request* debe incluir todos los codigos usados ademas de su informe.
-- El informe puede ser entregado en cualquier formato que desee, este debe ser claro sin informacion ni de mas ni de menos.
+- El informe debe ser entregado en formato *pdf*, este debe ser claro sin informacion ni de mas ni de menos.
