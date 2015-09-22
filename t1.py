@@ -5,6 +5,7 @@ global ax
 global bx
 
 
+
 a=np.loadtxt('sun_AM0.dat')
 print type (a)
 x=range(len(a))
@@ -21,7 +22,7 @@ plot(x,y)
 grid(True)
 title('$Radiacion \ de \ un \ cuerpo \ negro$')
 savefig("radiacion.png")
-show()
+#show()
 
 #parte 2
 
@@ -41,37 +42,37 @@ while i<(len(a)-1):
 print sol
 
 #Parte 3
-import astropy
 import astropy.constants as ac
+h=ac.h.cgs
+c=ac.c.cgs
+k=ac.k_B.cgs
+T=5778 #
+
+def f(x):
+    return ((np.tan(x))**3*(1/np.cos(x))**2)/(np.exp(np.tan(x))-1)
 
 
-def f(x):'''a priori la funcion era impropia pero como no se puede dar solucion a una funcion impropia
-cambio de variable y =arctan(x) en donde x->0 ; y->0 si x->inf y->pi/2'''
-    P= ((np.tan(x))**3.0*((np.tan(x))**2+1))/(np.exp(np.tan(x))-1)
-    return p
-b=np.pi/2.0
-a=  0.0
-def intsimpsons(n):
-    '''n es el numerode divisiones que le daremos'''
-    delta=(b-a)/n
+'''funcion que me dará la integral esta funcion se indefine con a=0 y b= pi/2 por lo que debe aplicar el metodo del punto medio'''
+
+#x_values = np.linspace(0, np.pi, 100)
+#plot(x_values,f)
+#show()
+pini=((2*np.pi*h)/c**2)*((k*T)/h)**4.0
+'''esta es la primera parte de la integral'''
+def intesimpsons(n):
+    '''n es el numero de divisiones al integrar y esta funcion lo que hace es hacer la integracion a
+    a traves del metodo de simpsons'''
+
+    delta (b-a)/n
     par=0.0
     impar=0.0
+    i=0.0
     for i in range(1,n):
-        if f(i) % 2 == 0:
-            par +=f(i)
-        elif f(i)% 2 == 1:
+        if f(i)%2==1:
             impar+=f(i)
+        elif f(i)%2==0:
+            par+=f(i)
         i+=1
-    sol=(delta/3.0)*(f(a)+4*impar+2*par+f(b))
-    return sol
+    return (delta/3.0)*(f(a)+4*impar + 2*par + f(b) )
 
-integral=intsimpsons(n) #tengo que ingresar la mejor aproximacion
-
-pi=np.pi
-h=ac.h.cgs
-c=ac.h.cgs
-k=ac.k_B.cgs
-T=5778.0 #grados kelvin temperatura del sol
-
-pi=((np.pi*h)/c**2.0)*(k*t/h)**4'''parte inicial de la integral'''
-intplanck= partei*integral
+solf= pini*intesimpsons(1000)
