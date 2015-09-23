@@ -33,6 +33,7 @@ delt=(bx-ax)/(len(a)-1)
 integr=  y[0]
 i=0
 while i<(len(a)-1):
+
     integr += y[i]
     i +=1
     sol=(2.0*integr+ y[0] + y[len(x)-1])*(delt/2.0)
@@ -44,8 +45,8 @@ bx=x[len(x)-1] #valor max de las longitudes de onda
 delta=(bx-ax)/(len(a)-1)
 par=0
 impar=0
-i=0
-while i<(len(a)-1):
+i=1
+while i<(len(a)-2):
         if i%2==1:
             impar+=y[i]
         elif i%2==0:

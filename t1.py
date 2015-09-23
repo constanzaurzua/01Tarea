@@ -7,7 +7,6 @@ global a
 global b
 
 
-
 a=np.loadtxt('sun_AM0.dat')
 print type (a)
 x=range(len(a))
@@ -15,8 +14,6 @@ y=range(len(a))
 for i in range(len(a)):
     x[i]=a[i][0]*0.001   #guardando longitudes de onda en unidades de micrometro
     y[i]=a[i][1]*10**(6)       #guardando espectro de un cuerpo negro
-
-
 xscale('log')
 xlabel('$longitud \ de \ onda \  [um]$')
 ylabel('$flujo [ ergs\cdot s^-1 \cdot cm^-2 \cdot um^-1]$')
@@ -27,8 +24,6 @@ savefig("radiacion.png")
 #show()
 
 #parte 2
-
-
 
 ax=x[0] #valor min de las longitudes de onda
 bx=x[len(x)-1] #valor max de las longitudes de onda
@@ -43,13 +38,11 @@ while i<(len(a)-1):
 print sol
 
 #haciendo sipmsons
-
-
 delta=(bx-ax)/(len(a)-1)
 par=0
 impar=0
-i=0
-while i<(len(a)-1):
+i=1
+while i<(len(a)-2):
         if i%2==1:
             impar+=y[i]
         elif i%2==0:
@@ -59,41 +52,38 @@ while i<(len(a)-1):
 print solsimp
 
 #Parte 3
-
 import astropy.constants as ac
 
 h=ac.h.cgs
 c=ac.c.cgs
 k=ac.k_B.cgs
+a=ac.a0.cgs
 T=5778 #
 
 def f(x):
-    return (((np.tan(x))**3.)*((np.cos(x))**(-2.0)))/(np.exp(np.tan(x))-1)
+    return (((np.tan(x))**3.0)*((np.cos(x))**(-2.0)))/(np.exp(np.tan(x))-1)
+
 pini=((2*np.pi*h)/c**2)*((k*T)/h)**4.0
 
 a=0#lim inicial
 b= np.pi/2#lim final
-def intesimpsons(n):
+def intesimpsons(n,f):
     a=0#lim inicial
     b= np.pi/2#lim final
     delta=(b-a)/n
     par=0
     impar=0
     i=0
-
+    x=a+i*delta
     for i in range(1,n):
         if i==1:
-            b=i
-            a=0
-            pmi=(b-a)*f((a+b)/2)
+            pmi=(b-x)*f((x+b)/2)
         elif i==n-1 :
-            a=i
-            b=np.pi/2
-            pmf=(b-a)*f((a+b)/2)
+            pmf=(x-a)*f((a+x)/2)
         elif i%2==1:
-            impar+=f(i)
+            impar+=f(x)
         elif i%2==0:
-            par+=f(i)
-    return (delta/3.0)*(4*impar + 2*par) + pmi + pmf
+            par+=f(x)
+    return (delta/3)*(4*impar + 2*par) + pmi + pmf
 
-intesimpsons(1000)*pini
+intesimpsons(1000,f)*pini
