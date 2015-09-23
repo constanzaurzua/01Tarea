@@ -3,6 +3,9 @@ from pylab import*
 import math
 global ax
 global bx
+global a
+global b
+
 
 
 a=np.loadtxt('sun_AM0.dat')
@@ -12,6 +15,7 @@ y=range(len(a))
 for i in range(len(a)):
     x[i]=a[i][0]*0.001   #guardando longitudes de onda en unidades de micrometro
     y[i]=a[i][1]*10**(6)       #guardando espectro de un cuerpo negro
+
 
 xscale('log')
 xlabel('$longitud \ de \ onda \  [um]$')
@@ -23,6 +27,8 @@ savefig("radiacion.png")
 #show()
 
 #parte 2
+
+
 
 ax=x[0] #valor min de las longitudes de onda
 bx=x[len(x)-1] #valor max de las longitudes de onda
@@ -36,10 +42,9 @@ while i<(len(a)-1):
 
 print sol
 
-#parte 2 pero con el metodo de simpsons
+#haciendo sipmsons
 
-ax=x[0] #valor min de las longitudes de onda
-bx=x[len(x)-1] #valor max de las longitudes de onda
+
 delta=(bx-ax)/(len(a)-1)
 par=0
 impar=0
@@ -50,42 +55,45 @@ while i<(len(a)-1):
         elif i%2==0:
             par+=y[i]
         i+=1
-        solsimp= (delta/3.0)*(y[0] + 4*impar + 2*par + y[len(x)-1])
+        solsimp= (delta/3.0)*(y[0] + 4*impar + 2*par + y[(len(x)-1)])
 print solsimp
 
 #Parte 3
 
 import astropy.constants as ac
+
 h=ac.h.cgs
 c=ac.c.cgs
 k=ac.k_B.cgs
 T=5778 #
 
 def f(x):
-    return ((np.tan(x))**3*(1/np.cos(x))**2)/(np.exp(np.tan(x))-1)
-
-
-'''funcion que me dará la integral esta funcion se indefine con a=0 y b= pi/2 por lo que debe aplicar el metodo del punto medio'''
-
-#x_values = np.linspace(0, np.pi, 100)
-#plot(x_values,f)
-#show()
+    return (((np.tan(x))**3.)*((np.cos(x))**(-2.0)))/(np.exp(np.tan(x))-1)
 pini=((2*np.pi*h)/c**2)*((k*T)/h)**4.0
-'''esta es la primera parte de la integral'''
+
+a=0#lim inicial
+b= np.pi/2#lim final
 def intesimpsons(n):
-    '''n es el numero de divisiones al integrar y esta funcion lo que hace es hacer la integracion a
-    a traves del metodo de simpsons'''
+    a=0#lim inicial
+    b= np.pi/2#lim final
+    delta=(b-a)/n
+    par=0
+    impar=0
+    i=0
 
-    delta (b-a)/n
-    par=0.0
-    impar=0.0
-    i=0.0
     for i in range(1,n):
-        if f(i)%2==1:
+        if i==1:
+            b=i
+            a=0
+            pmi=(b-a)*f((a+b)/2)
+        elif i==n-1 :
+            a=i
+            b=np.pi/2
+            pmf=(b-a)*f((a+b)/2)
+        elif i%2==1:
             impar+=f(i)
-        elif f(i)%2==0:
+        elif i%2==0:
             par+=f(i)
-        i+=1
-    return (delta/3.0)*(f(a)+4*impar + 2*par + f(b) )
+    return (delta/3.0)*(4*impar + 2*par) + pmi + pmf
 
-solf= pini*intesimpsons(1000)
+intesimpsons(1000)*pini
