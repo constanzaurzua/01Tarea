@@ -1,6 +1,7 @@
 import numpy as np
 from pylab import*
-import math
+import astropy.constants as ac
+import scipy.integrate as si
 global ax
 global bx
 global a
@@ -12,8 +13,8 @@ print type (a)
 x=range(len(a))
 y=range(len(a))
 for i in range(len(a)):
-    x[i]=a[i][0]*0.001   #guardando longitudes de onda en unidades de micrometro
-    y[i]=a[i][1]*10**(6)       #guardando espectro de un cuerpo negro
+    x[i]=a[i][0]#*0.001   #guardando longitudes de onda en unidades de micrometro
+    y[i]=a[i][1]#*10**(6)       #guardando espectro de un cuerpo negro
 xscale('log')
 xlabel('$longitud \ de \ onda \  [um]$')
 ylabel('$flujo [ ergs\cdot s^-1 \cdot cm^-2 \cdot um^-1]$')
@@ -21,69 +22,74 @@ plot(x,y)
 grid(True)
 title('$Radiacion \ de \ un \ cuerpo \ negro$')
 savefig("radiacion.png")
-#show()
+show()
 
 #parte 2
 
-ax=x[0] #valor min de las longitudes de onda
-bx=x[len(x)-1] #valor max de las longitudes de onda
-delt=(bx-ax)/(len(a)-1)
-integr=  y[0]
+intT= 0
 i=0
 while i<(len(a)-1):
-    integr += y[i]
-    i +=1
-    sol=(2.0*integr+ y[0] + y[len(x)-1])*(delt/2.0)
+    delta=x[i+1]-x[i]
+    intT += (y[i]+y[i+1])* (delta/2)
+    i+=1
+print "constante solar =",
+print intT, "[W*m^-2]"
 
-print sol
 
-#haciendo sipmsons
-delta=(bx-ax)/(len(a)-1)
-par=0
-impar=0
-i=1
-while i<(len(a)-2):
-        if i%2==1:
-            impar+=y[i]
-        elif i%2==0:
-            par+=y[i]
-        i+=1
-        solsimp= (delta/3.0)*(y[0] + 4*impar + 2*par + y[(len(x)-1)])
-print solsimp
+'''el valor que nos entrego la integral del trapecio es la cte solar
+esta se debe multiplicar por 4*pi* au'''
+
+Lumi=(4*np.pi)*((ac.au.value)**2)*intT
+print "Luminosidad solar =",
+print Lumi, "[W]"
+
+comp=si.trapz(y,x)
+print "valor con pc = ",
+print comp
+
+
+
 
 #Parte 3
-import astropy.constants as ac
 
-h=ac.h.cgs
-c=ac.c.cgs
-k=ac.k_B.cgs
-a=ac.a0.cgs
-T=5778 #
+h=ac.h
+c=ac.c
+k=ac.k_B
+a=ac.a0
+t=5778.0 #
 
 def f(x):
     return (((np.tan(x))**3.0)*((np.cos(x))**(-2.0)))/(np.exp(np.tan(x))-1)
 
-pini=((2*np.pi*h)/c**2)*((k*T)/h)**4.0
+pini=((2*np.pi*h)/c**2)*((k*t)/h)**4
+a=0.0000001 #para que no se indefina
+b= np.pi/2
+def inteplanck(x):
+    a=0.0000001 #para que no se indefina
+    b= np.pi/2 #por cambio de variable
+    n=1000    #integral para la funcion
+    esp=np.linspace(a,b,n)
+    delta= (esp[1]-esp[0])/2
+    c=0
+    intp=0
+    while c < n-2:
+        intp += (delta/3.0)*(f(esp[c])+(4*f(esp[c+1]))+ f(esp[c+2]))
+        c+= 1
+    return intp
 
-a=0#lim inicial
-b= np.pi/2#lim final
-def intesimpsons(n,f):
-    a=0#lim inicial
-    b= np.pi/2#lim final
-    delta=(b-a)/n
-    par=0
-    impar=0
-    i=0
-    x=a+i*delta
-    for i in range(1,n):
-        if i==1:
-            pmi=(b-x)*f((x+b)/2)
-        elif i==n-1 :
-            pmf=(x-a)*f((a+x)/2)
-        elif i%2==1:
-            impar+=f(x)
-        elif i%2==0:
-            par+=f(x)
-    return (delta/3)*(4*impar + 2*par) + pmi + pmf
+print "integral",
+print inteplanck(f)
+print "valor analitico",
+print pini*(np.pi**4)/15
+print "constante de planck",
+print pini*(inteplanck(f))
 
-intesimpsons(1000,f)*pini
+com2=si.quad(f,a,b)
+print "valor de la integral calculado por scipy = ",
+print com2
+
+#calcular el radio del sol
+P=inteplanck(f)*pini
+radio = np.sqrt(Lumi/(4*np.pi*P))
+print "radio del sol = ",
+print radio, "km"
