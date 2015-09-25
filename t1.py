@@ -21,10 +21,10 @@ ylabel('$flujo [ ergs\cdot s^-1 \cdot cm^-2 \cdot um^-1]$')
 plot(x,y)
 grid(True)
 title('$Radiacion \ de \ un \ cuerpo \ negro$')
-savefig("radiacion.png")
+#savefig("radiacion.png")
 show()
 
-#parte 2
+#parte 2 a traves del metodo del trapecio calculamos la integral
 
 intT= 0
 i=0
@@ -42,28 +42,29 @@ esta se debe multiplicar por 4*pi* au'''
 Lumi=(4*np.pi)*((ac.au.value)**2)*intT
 print "Luminosidad solar =",
 print Lumi, "[W]"
-
+#calculamos el valor con scipy para comparar
 comp=si.trapz(y,x)
-print "valor con pc = ",
-print comp
-
-
+print "valor cte. solar con scipy.integrate = ",
+print comp, "W*m^-2"
 
 
 #Parte 3
-
-h=ac.h
-c=ac.c
-k=ac.k_B
-a=ac.a0
-t=5778.0 #
-
+#constante que utilizaremos mas adeltante
+h=ac.h.value
+c=ac.c.value
+k=ac.k_B.value
+a=ac.a0.value
+t=5778.0
+#definimos la funcion que es la que se integrara
 def f(x):
     return (((np.tan(x))**3.0)*((np.cos(x))**(-2.0)))/(np.exp(np.tan(x))-1)
 
 pini=((2*np.pi*h)/c**2)*((k*t)/h)**4
 a=0.0000001 #para que no se indefina
 b= np.pi/2
+
+'''definimos el metodo de simpsons para poder integrar planck
+el parametro que recibe es la funcion anteriormente creada'''
 def inteplanck(x):
     a=0.0000001 #para que no se indefina
     b= np.pi/2 #por cambio de variable
@@ -76,16 +77,17 @@ def inteplanck(x):
         intp += (delta/3.0)*(f(esp[c])+(4*f(esp[c+1]))+ f(esp[c+2]))
         c+= 1
     return intp
-
-print "integral",
+#calculo de la integral
+print "valor de la integral fn. de Planck =",
 print inteplanck(f)
-print "valor analitico",
-print pini*(np.pi**4)/15
-print "constante de planck",
-print pini*(inteplanck(f))
 
+print "valor analitico de la integral fn. de Plack=",
+print (np.pi**4)/15
+print "constante de Planck=",
+print pini*(inteplanck(f)),"W"
+# se realiza la comparacion con el metodo scipy.integrate
 com2=si.quad(f,a,b)
-print "valor de la integral calculado por scipy = ",
+print "valor de la integral calculado por scipy.integrate = ",
 print com2
 
 #calcular el radio del sol
