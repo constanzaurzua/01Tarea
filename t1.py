@@ -2,8 +2,6 @@ import numpy as np
 from pylab import*
 import astropy.constants as ac
 import scipy.integrate as si
-global ax
-global bx
 global a
 global b
 
