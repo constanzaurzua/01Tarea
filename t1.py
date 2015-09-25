@@ -20,7 +20,7 @@ xlabel('$longitud \ de \ onda \  [um]$')
 ylabel('$flujo [ ergs\cdot s^-1 \cdot cm^-2 \cdot um^-1]$')
 plot(x,y)
 grid(True)
-title('$Radiacion \ de \ un \ cuerpo \ negro$')
+title('$Espectro \ del \ Sol $')
 #savefig("radiacion.png")
 show()
 
